@@ -50,14 +50,29 @@ def normalizar(texto):
     return texto.lower().strip()
 
 def carregar_ranking():
+    """Carrega o ranking do arquivo JSON. Retorna uma lista vazia se o arquivo não existir ou estiver corrompido."""
     if not os.path.exists(ARQUIVO_RANKING):
         return []
+
     try:
         with open(ARQUIVO_RANKING, "r", encoding="utf-8") as f:
             dados = json.load(f)
-            return dados if isinstance(dados, list) else []
-    except:
+            if isinstance(dados, list):
+                return dados
+            else:
+                print("⚠️ O arquivo de ranking não contém uma lista. Reiniciando ranking.")
+                return []
+
+    except json.JSONDecodeError:
+        # Arquivo existe, mas o conteúdo não é JSON válido
+        print("⚠️ Arquivo de ranking corrompido. Reiniciando ranking.")
         return []
+
+    except Exception as e:
+        # Qualquer outro erro inesperado
+        print(f"⚠️ Erro ao carregar o ranking: {e}")
+        return []
+
 
 def salvar_ranking(nome, pontos):
     ranking = carregar_ranking()
