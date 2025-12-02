@@ -104,10 +104,15 @@ Clique em 🔁 Reiniciar para jogar novamente
 
 ---
 ## 🧰 Tecnologias Utilizadas
+
 Tecnologia	Descrição
+
 Python 3	Lógica principal do jogo
+
 HTML5	Estrutura da interface web
+
 CSS3	Estilo e responsividade
+
 JavaScript (ES6)	Interatividade e validação de palpites
 
 
