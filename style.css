@@ -25,10 +25,10 @@ body {
 /* Container Principal */
 .container {
     background-color: var(--bg-overlay);
-    width: 80%;
+    width: 90%;
     max-width: 900px;
-    height: 95%;
-    max-height: 1100px;
+    height: 80%;
+    max-height: 1000px;
     border: 2px solid var(--gold);
     border-radius: 5px;
     padding: 25px;
