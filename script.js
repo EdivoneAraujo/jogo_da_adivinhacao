@@ -13,7 +13,7 @@ const PERSONAGENS = [
     {nome: "Luna Lovegood", casa: "Ravenclaw", papel: "Estudante excêntrica", foto: "imagens/luna.png"},
     {nome: "Ginny Weasley", casa: "Gryffindor", papel: "Irmã do Ron", foto: "imagens/ginny.png"},
     {nome: "Minerva McGonagall", casa: "Gryffindor", papel: "Professora de Transfiguração", foto: "imagens/minerva.png"},
-    {nome: "Remus Lupin", casa: "Gryffindor", papel: "Professor e lobisomem", foto: "https://upload.wikimedia.org/wikipedia/en/2/29/Remus_Lupin.jpeg"},
+    {nome: "Remus Lupin", casa: "Gryffindor", papel: "Professor e lobisomem", foto: "imagens/lupin.jpg"},
     {nome: "Bellatrix Lestrange", casa: "Slytherin", papel: "Comensal da Morte", foto: "imagens/bellatrix.png"},
     {nome: "Dobby", casa: "Nenhuma", papel: "Elfo Doméstico", foto: "imagens/dobby.png"}
 ];
