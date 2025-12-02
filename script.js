@@ -1,21 +1,21 @@
 // --- DADOS DOS PERSONAGENS ---
 const PERSONAGENS = [
-    {nome: "Harry Potter", casa: "Gryffindor", papel: "O protagonista", foto: "https://upload.wikimedia.org/wikipedia/en/d/d7/Harry_Potter_character_poster.jpg"},
-    {nome: "Hermione Granger", casa: "Gryffindor", papel: "Estudante brilhante", foto: "https://upload.wikimedia.org/wikipedia/en/d/d3/Hermione_Granger_poster.jpg"},
-    {nome: "Ron Weasley", casa: "Gryffindor", papel: "Melhor amigo", foto: "https://upload.wikimedia.org/wikipedia/en/5/5e/Ron_Weasley_poster.jpg"},
-    {nome: "Albus Dumbledore", casa: "Gryffindor", papel: "Diretor de Hogwarts", foto: "https://upload.wikimedia.org/wikipedia/en/f/fe/Dumbledore_and_Elder_Wand.JPG"},
-    {nome: "Severus Snape", casa: "Slytherin", papel: "Professor de Poções", foto: "https://upload.wikimedia.org/wikipedia/en/b/b9/Ootp076.jpg"},
-    {nome: "Sirius Black", casa: "Gryffindor", papel: "Padrinho do Harry", foto: "https://upload.wikimedia.org/wikipedia/en/6/6b/Sirius_Black.jpeg"},
-    {nome: "Rubeus Hagrid", casa: "Gryffindor", papel: "Guarda-caça", foto: "https://upload.wikimedia.org/wikipedia/en/1/10/RubeusHagrid.jpg"},
-    {nome: "Draco Malfoy", casa: "Slytherin", papel: "Rival do Harry", foto: "https://upload.wikimedia.org/wikipedia/en/1/16/Draco_Mal.JPG"},
-    {nome: "Lord Voldemort", casa: "Slytherin", papel: "Antagonista", foto: "https://upload.wikimedia.org/wikipedia/en/a/a3/Lordvoldemort.jpg"},
-    {nome: "Neville Longbottom", casa: "Gryffindor", papel: "Herói improvável", foto: "https://upload.wikimedia.org/wikipedia/en/7/75/Neville_Longbottom.jpeg"},
-    {nome: "Luna Lovegood", casa: "Ravenclaw", papel: "Estudante excêntrica", foto: "https://upload.wikimedia.org/wikipedia/en/c/c2/LunaLovegood.jpeg"},
-    {nome: "Ginny Weasley", casa: "Gryffindor", papel: "Irmã do Ron", foto: "https://upload.wikimedia.org/wikipedia/en/e/e7/Ginny_Weasley_poster.jpg"},
-    {nome: "Minerva McGonagall", casa: "Gryffindor", papel: "Professora de Transfiguração", foto: "https://upload.wikimedia.org/wikipedia/en/e/ea/McGonagall_%28Maggie_Smith%29.jpg"},
+    {nome: "Harry Potter", casa: "Gryffindor", papel: "O protagonista", foto: "imagens/harry.png"},
+    {nome: "Hermione Granger", casa: "Gryffindor", papel: "Estudante brilhante", foto: "imagens/hermione.png"},
+    {nome: "Ron Weasley", casa: "Gryffindor", papel: "Melhor amigo", foto: "imagens/ron.png"},
+    {nome: "Albus Dumbledore", casa: "Gryffindor", papel: "Diretor de Hogwarts", foto: "imagens/dumbledore.png"},
+    {nome: "Severus Snape", casa: "Slytherin", papel: "Professor de Poções", foto: "imagens/snape.png"},
+    {nome: "Sirius Black", casa: "Gryffindor", papel: "Padrinho do Harry", foto: "imagens/sirius.png"},
+    {nome: "Rubeus Hagrid", casa: "Gryffindor", papel: "Guarda-caça", foto: "imagens/hagrid.png"},
+    {nome: "Draco Malfoy", casa: "Slytherin", papel: "Rival do Harry", foto: "imagens/draco.png"},
+    {nome: "Lord Voldemort", casa: "Slytherin", papel: "Antagonista", foto: "imagens/voldemort.png"},
+    {nome: "Neville Longbottom", casa: "Gryffindor", papel: "Herói improvável", foto: "imagens/neville.jpg"},
+    {nome: "Luna Lovegood", casa: "Ravenclaw", papel: "Estudante excêntrica", foto: "imagens/luna.png"},
+    {nome: "Ginny Weasley", casa: "Gryffindor", papel: "Irmã do Ron", foto: "imagens/ginny.png"},
+    {nome: "Minerva McGonagall", casa: "Gryffindor", papel: "Professora de Transfiguração", foto: "imagens/minerva.png"},
     {nome: "Remus Lupin", casa: "Gryffindor", papel: "Professor e lobisomem", foto: "https://upload.wikimedia.org/wikipedia/en/2/29/Remus_Lupin.jpeg"},
-    {nome: "Bellatrix Lestrange", casa: "Slytherin", papel: "Comensal da Morte", foto: "https://upload.wikimedia.org/wikipedia/en/d/d8/Bellatrix_Lestrange.png"},
-    {nome: "Dobby", casa: "Nenhuma", papel: "Elfo Doméstico", foto: "https://upload.wikimedia.org/wikipedia/en/c/c9/Dobby_WB.jpg"}
+    {nome: "Bellatrix Lestrange", casa: "Slytherin", papel: "Comensal da Morte", foto: "imagens/bellatrix.png"},
+    {nome: "Dobby", casa: "Nenhuma", papel: "Elfo Doméstico", foto: "imagens/dobby.png"}
 ];
 
 // --- VARIÁVEIS DE ESTADO ---

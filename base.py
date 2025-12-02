@@ -5,20 +5,20 @@ import unicodedata
 import json
 import os
 from datetime import datetime
+from PIL import Image, ImageTk
 
 # --- CONFIGURAÇÕES E DADOS ---
 
 ARQUIVO_RANKING = "ranking_harry_potter.json"
 
 CORES = {
-    "fundo": "#1a1a1d",
     "texto_ouro": "#d4af37",
     "vermelho": "#740001",
     "verde": "#1a472a",
     "azul": "#0e1a40",
-    "pergaminho": "#f3e5ab",
-    "tinta": "#2b1b17",
-    "cinza": "#333333"
+    "tinta": "#f3e5ab",
+    "cinza": "#333333",
+    "branco": "#FFFFFF"
 }
 
 PERSONAGENS = [
@@ -43,7 +43,6 @@ PERSONAGENS = [
 # --- FUNÇÕES UTILITÁRIAS ---
 
 def normalizar(texto):
-    """Remove acentos e deixa minúsculo para comparação."""
     if not texto:
         return ""
     texto = unicodedata.normalize('NFD', texto)
@@ -51,28 +50,20 @@ def normalizar(texto):
     return texto.lower().strip()
 
 def carregar_ranking():
-    """Lê o ranking do arquivo JSON."""
     if not os.path.exists(ARQUIVO_RANKING):
         return []
     try:
         with open(ARQUIVO_RANKING, "r", encoding="utf-8") as f:
-            return json.load(f)
+            dados = json.load(f)
+            return dados if isinstance(dados, list) else []
     except:
         return []
 
 def salvar_ranking(nome, pontos):
-    """Salva a nova pontuação no arquivo JSON."""
     ranking = carregar_ranking()
-    ranking.append({
-        "nome": nome,
-        "pontos": pontos,
-        "data": datetime.now().strftime("%d/%m/%Y %H:%M")
-    })
-    # Ordena do maior para o menor
+    ranking.append({"nome": nome, "pontos": pontos, "data": datetime.now().strftime("%d/%m/%Y %H:%M")})
     ranking.sort(key=lambda x: x["pontos"], reverse=True)
-    # Mantém apenas os top 10
     ranking = ranking[:10]
-    
     with open(ARQUIVO_RANKING, "w", encoding="utf-8") as f:
         json.dump(ranking, f, ensure_ascii=False, indent=4)
 
@@ -82,103 +73,83 @@ class HarryPotterGame:
     def __init__(self, root):
         self.root = root
         self.root.title("Adivinhação Mágica - Harry Potter")
-        self.root.geometry("600x700")
-        self.root.configure(bg=CORES["fundo"])
+        self.root.geometry("800x900")
 
-        # Estado do Jogo
+        # --- Canvas com imagem de fundo ---
+        self.canvas = tk.Canvas(root, width=800, height=900, highlightthickness=0)
+        self.canvas.pack(fill="both", expand=True)
+
+        imagem_fundo = Image.open("animacoes/castello-di-harry-potter.jpg")
+        imagem_fundo = imagem_fundo.resize((800, 900), Image.LANCZOS)
+        self.bg_img = ImageTk.PhotoImage(imagem_fundo)
+        self.canvas.create_image(0, 0, anchor="nw", image=self.bg_img)
+
+        # Estado do jogo
         self.tentativas = 0
         self.pontuacao_atual = 0
         self.personagem_atual = {}
         self.dicas_disponiveis = []
         self.idx_dica = 0
-        
+
+        self.var_dificuldade = tk.IntVar(value=2)  # padrão Médio
         self.criar_interface()
         self.iniciar_jogo()
 
     def criar_interface(self):
         # Título
-        tk.Label(self.root, text="⚡ Mundo Bruxo ⚡", font=("Times New Roman", 28, "bold"), 
-                bg=CORES["fundo"], fg=CORES["texto_ouro"]).pack(pady=15)
+        self.canvas.create_text(400, 40, text="⚡ Mundo Bruxo ⚡", font=("Times New Roman", 28, "bold"), fill=CORES["texto_ouro"])
 
-        # Frame de Controles Superiores
-        frame_top = tk.Frame(self.root, bg=CORES["fundo"])
-        frame_top.pack(fill="x", padx=20)
+        # Nível de dificuldade
+        tk.Label(self.root, text="Escolha o nível de magia:", bg="#000000", fg="white", font=("Arial", 12, "bold")).place(x=20, y=90)
+        tk.Radiobutton(self.root, text="Fácil (8)", variable=self.var_dificuldade, value=1, bg="#000000", fg="white", selectcolor=CORES["cinza"]).place(x=20, y=120)
+        tk.Radiobutton(self.root, text="Médio (6)", variable=self.var_dificuldade, value=2, bg="#000000", fg="white", selectcolor=CORES["cinza"]).place(x=20, y=150)
+        tk.Radiobutton(self.root, text="Difícil (4)", variable=self.var_dificuldade, value=3, bg="#000000", fg="white", selectcolor=CORES["cinza"]).place(x=20, y=180)
 
-        # Seletor de Dificuldade
-        self.var_dificuldade = tk.IntVar(value=2)
-        frame_dif = tk.LabelFrame(frame_top, text="Nível de Magia", bg=CORES["fundo"], fg="white", font=("Arial", 10))
-        frame_dif.pack(side=tk.LEFT, padx=10)
-        
-        tk.Radiobutton(frame_dif, text="Fácil (8)", variable=self.var_dificuldade, value=1, 
-                    bg=CORES["fundo"], fg="white", selectcolor=CORES["cinza"]).pack(anchor="w")
-        tk.Radiobutton(frame_dif, text="Médio (6)", variable=self.var_dificuldade, value=2, 
-                    bg=CORES["fundo"], fg="white", selectcolor=CORES["cinza"]).pack(anchor="w")
-        tk.Radiobutton(frame_dif, text="Difícil (4)", variable=self.var_dificuldade, value=3, 
-                    bg=CORES["fundo"], fg="white", selectcolor=CORES["cinza"]).pack(anchor="w")
+        # HUD
+        self.lbl_tentativas = self.canvas.create_text(400, 220, text="⚡ Vidas: --", font=("Arial", 16, "bold"), fill=CORES["texto_ouro"])
+        self.lbl_pontos = self.canvas.create_text(400, 260, text="Pontos Possíveis: 0", font=("Arial", 16), fill=CORES["branco"])
 
-        # Botões de Controle (Novo Jogo / Ranking)
-        frame_btns_top = tk.Frame(frame_top, bg=CORES["fundo"])
-        frame_btns_top.pack(side=tk.RIGHT, padx=10)
+        # Log
+        self.log_textos = []
+        self.log_y = 300
 
-        tk.Button(frame_btns_top, text="Novo Jogo", command=self.iniciar_jogo, 
-                bg=CORES["azul"], fg="white", font=("Arial", 10, "bold"), width=15).pack(pady=2)
-        
-        tk.Button(frame_btns_top, text="🏆 Ver Ranking", command=self.exibir_ranking_janela, 
-                bg=CORES["texto_ouro"], fg="black", font=("Arial", 10, "bold"), width=15).pack(pady=2)
-
-        # Placar (HUD)
-        self.frame_hud = tk.Frame(self.root, bg=CORES["fundo"])
-        self.frame_hud.pack(pady=15)
-        
-        self.lbl_tentativas = tk.Label(self.frame_hud, text="Vidas: --", font=("Arial", 16, "bold"), bg=CORES["fundo"], fg=CORES["texto_ouro"])
-        self.lbl_tentativas.pack(side=tk.LEFT, padx=20)
-        
-        self.lbl_pontos = tk.Label(self.frame_hud, text="Pontos: 0", font=("Arial", 16), bg=CORES["fundo"], fg="white")
-        self.lbl_pontos.pack(side=tk.LEFT, padx=20)
-
-        # Área de Texto (Pergaminho)
-        self.txt_log = tk.Text(self.root, height=10, bg=CORES["pergaminho"], fg=CORES["tinta"], 
-                            font=("Courier New", 12, "bold"), padx=10, pady=10)
-        self.txt_log.pack(fill="both", padx=30, pady=10)
-        self.txt_log.config(state=tk.DISABLED)
-
-        # Área de Input
-        tk.Label(self.root, text="Quem é o personagem?", bg=CORES["fundo"], fg="white", font=("Arial", 12)).pack()
-        
-        self.entrada = tk.Entry(self.root, font=("Arial", 14), justify="center", bg="#333", fg="white", insertbackground="white")
-        self.entrada.pack(pady=5, ipadx=50, ipady=5)
+        # Entrada do usuário
+        self.entrada_var = tk.StringVar()
+        self.entrada = tk.Entry(self.root, font=("Arial", 14), justify="center", textvariable=self.entrada_var, fg="white", bg="#000000", insertbackground="white", bd=0)
+        self.entrada_window = self.canvas.create_window(400, 700, window=self.entrada, width=400, height=30)
         self.entrada.bind('<Return>', lambda e: self.verificar_palpite())
 
-        # Botões de Ação Inferiores
-        frame_acao = tk.Frame(self.root, bg=CORES["fundo"])
-        frame_acao.pack(pady=20)
+        # Botões
+        self.btn_chutar = tk.Button(self.root, text="🪄 Chutar", command=self.verificar_palpite, bg=CORES["vermelho"], fg="white", font=("Arial", 12, "bold"), width=15, height=2)
+        self.btn_chutar_window = self.canvas.create_window(250, 750, window=self.btn_chutar)
+        self.btn_dica = tk.Button(self.root, text="🧪 Dica (-1 Vida)", command=self.usar_dica, bg=CORES["verde"], fg="white", font=("Arial", 12, "bold"), width=15, height=2)
+        self.btn_dica_window = self.canvas.create_window(550, 750, window=self.btn_dica)
 
-        self.btn_chutar = tk.Button(frame_acao, text="🪄 Chutar", command=self.verificar_palpite, 
-                                    bg=CORES["vermelho"], fg="white", font=("Arial", 12, "bold"), width=15, height=2)
-        self.btn_chutar.pack(side=tk.LEFT, padx=10)
+        # Botões de Novo Jogo e Ranking
+        self.btn_novo = tk.Button(self.root, text="Novo Jogo", command=self.iniciar_jogo, bg=CORES["azul"], fg="white", font=("Arial", 10, "bold"), width=15)
+        self.btn_novo_window = self.canvas.create_window(150, 800, window=self.btn_novo)
+        self.btn_ranking = tk.Button(self.root, text="🏆 Ver Ranking", command=self.exibir_ranking_janela, bg=CORES["texto_ouro"], fg="black", font=("Arial", 10, "bold"), width=15)
+        self.btn_ranking_window = self.canvas.create_window(650, 800, window=self.btn_ranking)
 
-        self.btn_dica = tk.Button(frame_acao, text="🧪 Dica (-1 Vida)", command=self.usar_dica, 
-                            bg=CORES["verde"], fg="white", font=("Arial", 12, "bold"), width=15, height=2)
-        self.btn_dica.pack(side=tk.LEFT, padx=10)
-
+    # --- Funções de jogo ---
     def log_pergaminho(self, texto):
-        self.txt_log.config(state=tk.NORMAL)
-        self.txt_log.insert(tk.END, texto + "\n")
-        self.txt_log.see(tk.END)
-        self.txt_log.config(state=tk.DISABLED)
+        self.log_textos.append(texto)
+        if len(self.log_textos) > 10:
+            self.log_textos.pop(0)
+        self.canvas.delete("log")
+        y = self.log_y
+        for msg in self.log_textos:
+            self.canvas.create_text(400, y, text=msg, font=("Courier New", 12, "bold"), fill=CORES["tinta"], tags="log")
+            y += 20
 
     def iniciar_jogo(self):
+        # Define tentativas baseado no nível
         escolha = self.var_dificuldade.get()
-        if escolha == 1:
-            self.tentativas = 8
-        elif escolha == 2:
-            self.tentativas = 6
-        else:
-            self.tentativas = 4
+        self.tentativas = 8 if escolha == 1 else 6 if escolha == 2 else 4
 
         self.personagem_atual = random.choice(PERSONAGENS)
         self.nome_alvo = self.personagem_atual["nome"]
-        
+
         dicas_brutas = [
             f"Casa: {self.personagem_atual['casa']}",
             f"Papel: {self.personagem_atual['papel']}",
@@ -186,42 +157,35 @@ class HarryPotterGame:
             f"Letras: {len(self.nome_alvo.replace(' ', ''))}",
         ]
         random.shuffle(dicas_brutas)
-        # Garante que a primeira dica seja 'Papel' ou 'Casa' para não ser muito difícil
         melhor_dica = f"Papel: {self.personagem_atual['papel']}"
         if melhor_dica in dicas_brutas:
             dicas_brutas.remove(melhor_dica)
             dicas_brutas.insert(0, melhor_dica)
-            
         self.dicas_disponiveis = dicas_brutas
         self.idx_dica = 0
         self.pontuacao_atual = 0
 
         self.atualizar_hud()
-        self.txt_log.config(state=tk.NORMAL)
-        self.txt_log.delete(1.0, tk.END)
+        self.log_textos.clear()
         self.log_pergaminho("📜 O Cálice de fogo escolheu um nome...")
-        self.entrada.delete(0, tk.END)
+        self.entrada_var.set("")
         self.entrada.config(state=tk.NORMAL)
-        self.entrada.focus()
         self.btn_chutar.config(state=tk.NORMAL)
         self.btn_dica.config(state=tk.NORMAL)
+        self.entrada.focus()
 
     def atualizar_hud(self):
-        self.lbl_tentativas.config(text=f"⚡ Vidas: {self.tentativas}")
-        
-        # Pontuação dinâmica: 100 base + 50 por vida restante
+        self.canvas.itemconfig(self.lbl_tentativas, text=f"⚡ Vidas: {self.tentativas}")
         pts = 100 + (self.tentativas * 50)
-        self.lbl_pontos.config(text=f"Pontos Possíveis: {pts}")
+        self.canvas.itemconfig(self.lbl_pontos, text=f"Pontos Possíveis: {pts}")
 
     def usar_dica(self):
         if self.tentativas <= 1:
             messagebox.showwarning("Atenção", "Magia insuficiente para usar Veritaserum!")
             return
-
         if self.idx_dica >= len(self.dicas_disponiveis):
             self.log_pergaminho("⚠️ Não há mais dicas!")
             return
-
         self.tentativas -= 1
         dica = self.dicas_disponiveis[self.idx_dica]
         self.idx_dica += 1
@@ -229,17 +193,15 @@ class HarryPotterGame:
         self.atualizar_hud()
 
     def verificar_palpite(self):
-        palpite = self.entrada.get()
+        palpite = self.entrada_var.get()
         if not palpite:
             return
-
         norm_palpite = normalizar(palpite)
         norm_alvo = normalizar(self.nome_alvo)
 
-        # Cheat code
         if norm_palpite == "revelio":
             self.usar_dica()
-            self.entrada.delete(0, tk.END)
+            self.entrada_var.set("")
             return
 
         if norm_palpite == norm_alvo or (len(norm_palpite) > 3 and norm_palpite in norm_alvo.split()):
@@ -247,9 +209,8 @@ class HarryPotterGame:
         else:
             self.tentativas -= 1
             self.log_pergaminho(f"❌ '{palpite}' está incorreto.")
-            self.entrada.delete(0, tk.END)
+            self.entrada_var.set("")
             self.atualizar_hud()
-
             if self.tentativas == 0:
                 self.derrota()
 
@@ -257,16 +218,11 @@ class HarryPotterGame:
         pontos_finais = 100 + (self.tentativas * 50)
         self.log_pergaminho(f"✨ ACERTOU! É {self.nome_alvo}!")
         self.log_pergaminho(f"🏆 Pontuação: {pontos_finais}")
-        
         self.entrada.config(state=tk.DISABLED)
         self.btn_chutar.config(state=tk.DISABLED)
         self.btn_dica.config(state=tk.DISABLED)
-        
         messagebox.showinfo("Vitória!", f"Parabéns!\nVocê descobriu: {self.nome_alvo}\nPontos: {pontos_finais}")
-
-        # --- AQUI ESTÁ O USO DO SIMPLEDIALOG ---
         nome = simpledialog.askstring("Recorde Mágico", "Digite seu nome para o Ranking:", parent=self.root)
-        
         if nome:
             salvar_ranking(nome, pontos_finais)
             self.exibir_ranking_janela()
@@ -279,22 +235,16 @@ class HarryPotterGame:
         messagebox.showerror("Fim de Jogo", f"Suas vidas acabaram.\nO personagem era: {self.nome_alvo}")
 
     def exibir_ranking_janela(self):
-        # Cria uma nova janela (pop-up)
         top = tk.Toplevel(self.root)
         top.title("🏆 Salão da Fama")
         top.geometry("400x500")
-        top.configure(bg=CORES["azul"])
-
-        tk.Label(top, text="Melhores Bruxos", font=("Cinzel", 20, "bold"), 
-                bg=CORES["azul"], fg=CORES["texto_ouro"]).pack(pady=20)
-
+        top.configure(bg=None)
+        tk.Label(top, text="Melhores Bruxos", font=("Cinzel", 20, "bold"), bg=None, fg=CORES["texto_ouro"]).pack(pady=20)
         dados = carregar_ranking()
-
-        frame_lista = tk.Frame(top, bg=CORES["azul"])
+        frame_lista = tk.Frame(top, bg=None)
         frame_lista.pack(fill="both", expand=True, padx=20)
-
         if not dados:
-            tk.Label(frame_lista, text="Nenhum registro ainda.", bg=CORES["azul"], fg="white").pack()
+            tk.Label(frame_lista, text="Nenhum registro ainda.", bg=None, fg="white").pack()
         else:
             for i, reg in enumerate(dados):
                 cor = "white"
@@ -306,13 +256,11 @@ class HarryPotterGame:
                     prefixo = "🥈"
                 elif i == 2:
                     prefixo = "🥉"
-
                 texto = f"{prefixo} {reg['nome']} - {reg['pontos']} pts"
-                tk.Label(frame_lista, text=texto, font=("Courier New", 12, "bold"), 
-                        bg=CORES["azul"], fg=cor, anchor="w").pack(fill="x", pady=2)
-
+                tk.Label(frame_lista, text=texto, font=("Courier New", 12, "bold"), bg=None, fg=cor, anchor="w").pack(fill="x", pady=2)
         tk.Button(top, text="Fechar", command=top.destroy, bg="#333", fg="white").pack(pady=20)
 
+# --- EXECUÇÃO ---
 if __name__ == "__main__":
     root = tk.Tk()
     app = HarryPotterGame(root)
