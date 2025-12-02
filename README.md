@@ -105,15 +105,15 @@ Clique em 🔁 Reiniciar para jogar novamente
 ---
 ## 🧰 Tecnologias Utilizadas
 
-Tecnologia	Descrição
+Tecnologia  --	Descrição
 
-Python 3	Lógica principal do jogo
+Python 3    --	Lógica principal do jogo
 
-HTML5	Estrutura da interface web
+HTML5       --	Estrutura da interface web
 
-CSS3	Estilo e responsividade
+CSS3	      --  Estilo e responsividade
 
-JavaScript (ES6)	Interatividade e validação de palpites
+JavaScript (ES6)  --	Interatividade e validação de palpites
 
 
 ---
@@ -121,11 +121,15 @@ JavaScript (ES6)	Interatividade e validação de palpites
 
 📱 Layout 100% responsivo para mobile
 
-👩‍💻 Autoras
+
+---
+## 👩‍💻 Autoras
 
 Edivone Araújo e Típhane Pereira
 
+
 💬 Desenvolvido para prática de lógica em Python e front-end interativo.
+
 
 🏁 Licença
 Este projeto é licenciado sob a MIT License. Sinta-se livre para estudar e adaptar!
