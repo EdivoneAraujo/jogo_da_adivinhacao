@@ -131,7 +131,7 @@ JavaScript (ES6)  --	Interatividade e validação de palpites
 
 ## 📧 Contatos:
 
-<p align="center"> <a href="https://www.linkedin.com/in/edivone-araujo"> <img src="https://img.shields.io/badge/LinkedIn-Edivone%20Araújo-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"> </a> <a href="https://github.com/EdivoneAraujo"> <img src="https://img.shields.io/badge/GitHub-Edivone%20Araújo-black?style=for-the-badge&logo=github"> </a> </p> <p align="center"> <a href="https://www.linkedin.com/in/TiphanePereira"> <img src="https://img.shields.io/badge/LinkedIn-Tiphane%20Pereira-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"> </a> <a href="https://github.com/TiphaneP"> <img src="https://img.shields.io/badge/GitHub-Típhane%20Pereira-black?style=for-the-badge&logo=github"> </a> </p>
+<p align="center"> <a href="https://www.linkedin.com/in/edivone-araujo"> <img src="https://img.shields.io/badge/LinkedIn-Edivone%20Araújo-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"> </a> <a href="https://github.com/EdivoneAraujo"> <img src="https://img.shields.io/badge/GitHub-Edivone%20Araújo-black?style=for-the-badge&logo=github"> </a> </p> <p align="center"> <a href="https://www.linkedin.com/in/tiphane-pereira?utm_source=share_via&utm_content=profile&utm_medium=member_ios"> <img src="https://img.shields.io/badge/LinkedIn-Típhane%20Pereira-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"> </a> <a href="https://github.com/TiphaneP"> <img src="https://img.shields.io/badge/GitHub-Típhane%20Pereira-black?style=for-the-badge&logo=github"> </a> </p>
 
 💬 Desenvolvido para prática de lógica em Python e front-end interativo.
 
