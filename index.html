@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivinhação Mágica - Harry Potter</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Crimson+Text:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <audio id="somAbertura" src="sons/abertura.mp3"></audio>
+    <audio id="somMagia" src="sons/magia.mp3"></audio>
+    <audio id="somAcerto" src="sons/acerto.mp3"></audio>
+    <audio id="somErro" src="sons/erro.mp3"></audio>
+
+    <div class="container">
+        
+        <div id="start-screen" class="screen active">
+            <h1>Mundo Bruxo</h1>
+            
+            <img src="animacoes/brasao.png" class="cover-img" alt="Capa do Jogo">
+            
+            <p style="font-size: 2rem; margin-bottom: 20px;">Descubra o personagem secreto</p>
+            
+            <div class="difficulty-selector">
+                <label for="difficulty">Nível de Magia:</label>
+                <select id="difficulty">
+                    <option value="8">Trouxa (Fácil - 8 vidas)</option>
+                    <option value="6" selected>Bruxo (Médio - 6 vidas)</option>
+                    <option value="4">Auror (Difícil - 4 vidas)</option>
+                </select>
+            </div>
+
+            <button class="btn-start" onclick="startGame()">✨ Iniciar Adivinhação</button>
+            <button class="btn-rank-menu" onclick="showRankingScreen()">🏆 Ver Ranking</button>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <h1 id="game-title">Quem é o Bruxo?</h1>
+            
+            <div class="hud">
+                <span id="lives-display">⚡ Vidas: 6</span>
+                <span id="score-display" style="margin-left: 15px; color: #fff;">Pontos: 0</span>
+            </div>
+
+            <div id="result-area">
+                <img id="char-photo" class="character-photo" src="" alt="Personagem" 
+                    onerror="this.src='https://cdn-icons-png.flaticon.com/512/2320/2320288.png'">
+                <p id="result-text" style="font-size: 1.5rem; margin-bottom: 10px;"></p>
+            </div>
+
+            <div class="parchment-log">
+                </div>
+
+            <div id="input-area">
+                <input type="text" id="guess-input" placeholder="Digite o nome..." autocomplete="off">
+
+                <div class="btn-group">
+                    <button class="btn-guess" onclick="checkGuess()">🪄 Chutar</button>
+                    <button class="btn-hint" onclick="getHint()">🧪 Dica (-1 Vida)</button>
+                </div>
+            </div>
+            
+            <div id="end-buttons" style="display:none; gap: 10px;">
+                <button class="btn-reset" onclick="resetGame()">Jogar Novamente</button>
+                <button class="btn-rank-game" onclick="showRankingScreen()">🏆 Ranking</button>
+            </div>
+        </div>
+
+        <div id="ranking-screen" class="screen">
+            <h1>Salão da Fama</h1>
+            <div class="ranking-board">
+                <ul id="ranking-list">
+                    </ul>
+            </div>
+            <button class="btn-reset" onclick="backToMenu()">Voltar ao Menu</button>
+        </div>
+
+        <div id="name-modal" class="modal-overlay">
+            <div class="modal-box">
+                <h2>✨ Recorde Mágico! ✨</h2>
+                <p>O Ministério da Magia exige sua identificação.</p>
+                <input type="text" id="player-name-input" placeholder="Nome do Bruxo(a)" maxlength="15">
+                <button onclick="confirmSave()">Salvar no Ranking</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

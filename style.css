@@ -1,0 +1,237 @@
+:root {
+    --bg-overlay: #1212146e;
+    --gold: #d4af37;
+    --gryffindor: #740001;
+    --slytherin: #1a472a;
+    --ravenclaw: #0e1a40;
+    --parchment: #f3e5ab;
+    --ink: #2b1b17;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Crimson Text', serif;
+    background: url('animacoes/abertura.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Container Principal */
+.container {
+    background-color: var(--bg-overlay);
+    width: 90%;
+    max-width: 900px;
+    height: 100%;
+    max-height: 1100px;
+    border: 2px solid var(--gold);
+    border-radius: 5px;
+    padding: 25px;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    text-align: center;
+    position: relative;
+    backdrop-filter: blur(3px);
+}
+
+/* Tela de Ranking (Fundo Salão Comunal) */
+#ranking-screen.screen {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+    url('animacoes/salao_comunal.jpg') no-repeat center center;
+    background-size: cover;
+    border-radius: 10px;
+    padding: 50px;
+    height: 100%;
+    display: none;
+}
+#ranking-screen.active {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    color: var(--gold);
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px black;
+}
+
+.screen { display: none; width: 100%; height: 100%; animation: fadeIn 0.5s; }
+.screen.active { display: block; }
+
+.cover-img {
+    width: 60%;
+    height: 600px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--gold);
+    margin-bottom: 15px;
+}
+
+.difficulty-selector { margin: 20px 0; }
+label { font-size: 2rem; display: block; margin-bottom: 5px; }
+
+select {
+    padding: 10px;
+    background: #333;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    width: 80%;
+}
+
+.hud {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.parchment-log {
+    background-color: var(--parchment);
+    color: var(--ink);
+    height: 450px;
+    overflow-y: auto;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: left;
+    margin-bottom: 15px;
+    border: 1px solid #cdaa6d;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+.log-entry { margin-bottom: 8px; border-bottom: 1px dashed #ffffff; padding-bottom: 4px; }
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid var(--gold);
+    background: #ffffff1a;
+    color: #ffffff;
+    font-size: 1.5em;
+    text-align: center;
+}
+input[type="text"]:focus { outline: none; background: #ffffff33; box-shadow: 0 0 10px var(--gold); }
+
+#result-area {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+    animation: fadeIn 1s;
+}
+
+.character-photo {
+    width: 150px;
+    height: 180px;
+    object-fit: cover;
+    border: 4px solid var(--gold);
+    border-radius: 10px;
+    box-shadow: 0 0 15px var(--gold);
+    margin-bottom: 10px;
+    background-color: #000;
+}
+
+/* RANKING */
+.ranking-board {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#ranking-list { list-style: none; padding: 0; text-align: left; }
+#ranking-list li {
+    background: rgba(255, 255, 255, 0.1);
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 5px;
+    border-bottom: 1px solid var(--gold);
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+}
+#ranking-list li span.score { color: var(--gold); font-weight: bold; }
+
+/* MODAL POPUP */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #000000cc;
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+.modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+
+.modal-box {
+    background: #1a1a1d;
+    border: 2px solid var(--gold);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 30px var(--gold);
+    width: 90%;
+    max-width: 400px;
+}
+.modal-box h2 { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 10px; }
+.modal-box p { margin-bottom: 15px; font-size: 1.1rem; }
+.modal-box input { background: #333; margin-bottom: 15px; font-family: 'Cinzel', serif; }
+.modal-box button { background-color: var(--slytherin); padding: 10px; border: 1px solid var(--gold); }
+
+
+/* Botões */
+.btn-group, #end-buttons { display: flex; gap: 15px; justify-content: center;}
+
+button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+    color: white;
+    text-transform: uppercase;
+}
+button:active { transform: scale(0.98); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-start { background-color: var(--ravenclaw); margin-top: 10px; padding: 15px; font-size: 1.3rem;}
+.btn-guess { background-color: var(--gryffindor); }
+.btn-hint { background-color: var(--slytherin); }
+.btn-reset { background-color: #33333300;; height: auto; margin-top: 0px; border: 1px solid var(--gold);}
+.btn-rank-menu { background-color: #555; margin-top: 10px; border: 1px solid var(--gold); }
+.btn-rank-game { background-color: var(--gold); color: #000; margin-top: 10px; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.shake { animation: shake 0.5s; }
+@keyframes shake {
+    0% { transform: translateX(0); } 25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); } 75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
